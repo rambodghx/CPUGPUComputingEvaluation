@@ -28,7 +28,7 @@ def GetGpuStatus() -> str:
 
 def CreateLogFile()->TextIOWrapper:
     fileTmp = open("./result.txt",mode="w")
-    fileTmp.write("Run,Scenario,Unit,Response Time (ms),Average\n")
+    fileTmp.write("Run,Scenario,Unit,Unit Load,Response Time (ms),Average\n")
     return fileTmp
 
 csvFile = CreateLogFile()
@@ -37,14 +37,17 @@ scenCpuList = []
 scenGpuList = []
 
 def ExecuteScen15TimesWithResult(round):
+    cpuLoad = psutil.cpu_percent(percpu=False)
+    gpuLoad = gpustat.GPUStatCollection[0].new_query().jsonify()["gpus"][0]["utilization.gpu"]
+
     cpuTime = Scenario1.ExecuteCpuWithResult() * 100
     gpuTime = Scenario1.ExecuteGpuWithResult() * 100
 
     scenCpuList.append(cpuTime)
     scenGpuList.append(gpuTime)
 
-    cpuText = "{0},{1},{2},{3}\n".format(round,"No.1","CPU",cpuTime,"-")
-    gpuText = "{0},{1},{2},{3}\n".format(round,"No.1","GPU",gpuTime,"-")
+    cpuText = "{0},{1},{2},{3},{4}\n".format(round,"No.1","CPU",cpuLoad,cpuTime,"-")
+    gpuText = "{0},{1},{2},{3},{4}\n".format(round,"No.1","GPU",gpuLoad,gpuTime,"-")
     
     csvFile.write(cpuText)
     csvFile.write(gpuText)
@@ -52,14 +55,17 @@ def ExecuteScen15TimesWithResult(round):
     print("{0} of scenario 1...".format(round))
 
 def ExecuteScen25TimesWithResult(round):
+    cpuLoad = psutil.cpu_percent(percpu=False)
+    gpuLoad = gpustat.GPUStatCollection[0].new_query().jsonify()["gpus"][0]["utilization.gpu"]
+
     cpuTime = Scenario2.ExecuteCpuWithResult() * 100
     gpuTime = Scenario2.ExecuteGpuWithResult() * 100
 
     scenCpuList.append(cpuTime)
     scenGpuList.append(gpuTime)
 
-    cpuText = "{0},{1},{2},{3}\n".format(round,"No.2","CPU",cpuTime,"-")
-    gpuText = "{0},{1},{2},{3}\n".format(round,"No.2","GPU",gpuTime,"-")
+    cpuText = "{0},{1},{2},{3},{4}\n".format(round,"No.2","CPU",cpuLoad,cpuTime,"-")
+    gpuText = "{0},{1},{2},{3},{4}\n".format(round,"No.2","GPU",gpuLoad,gpuTime,"-")
     
     csvFile.write(cpuText)
     csvFile.write(gpuText)
@@ -74,8 +80,8 @@ for i in range(5):
     ExecuteScen15TimesWithResult(i)
     sleep(2)
 
-csvFile.write("AVG,No.1,CPU,-,{0}\n".format(sum(scenCpuList)/len(scenCpuList)))
-csvFile.write("AVG,No.1,GPU,-,{0}\n".format(sum(scenGpuList)/len(scenGpuList)))
+csvFile.write("AVG,No.1,CPU,-,-,{0}\n".format(sum(scenCpuList)/len(scenCpuList)))
+csvFile.write("AVG,No.1,GPU,-,-,{0}\n".format(sum(scenGpuList)/len(scenGpuList)))
 
 print("Scenario 1 has been completed")
 
@@ -86,7 +92,7 @@ for i in range(5):
     ExecuteScen25TimesWithResult(i)
     sleep(2)
 
-csvFile.write("AVG,No.2,CPU,-,{0}\n".format(sum(scenCpuList)/len(scenCpuList)))
-csvFile.write("AVG,No.2,GPU,-,{0}\n".format(sum(scenGpuList)/len(scenGpuList)))
+csvFile.write("AVG,No.2,CPU,-,-,{0}\n".format(sum(scenCpuList)/len(scenCpuList)))
+csvFile.write("AVG,No.2,GPU,-,-,{0}\n".format(sum(scenGpuList)/len(scenGpuList)))
 
 print("Scenario 2 has been completed.")
