@@ -89,4 +89,4 @@ for i in range(5):
 csvFile.write("AVG,No.2,CPU,-,{0}\n".format(sum(scenCpuList)/len(scenCpuList)))
 csvFile.write("AVG,No.2,GPU,-,{0}\n".format(sum(scenGpuList)/len(scenGpuList)))
 
-print("Scenario 2 has been completed")
+print("Scenario 2 has been completed.")
