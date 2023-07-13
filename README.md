@@ -5,6 +5,20 @@ The objective of this project is to evaluate the CPU cores and GPU computing str
 
 ## (2) Setup:
 -> You must install CUDA
+## (2.1) Cuda Installation:
+
+https://developer.nvidia.com/cuda-downloads
+
+## (2.2) OPENCV Cuda Build:
+
+Download opencv source:
+
+https://opencv.org/releases/
+
+And then build via CMake with checked cuda flag:
+
+https://cmake.org/
+
 `pip install numpy`
 
 `pip install cupy-cuda12x`
